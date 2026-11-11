@@ -1,16 +1,15 @@
-# XENO Mobile v0.1
+# XENO Mobile v0.2
 
-A zero-build, iPhone-first Progressive Web App foundation. No dependencies or API keys.
+Static PWA frontend for GitHub Pages plus a separate Cloudflare Worker gateway.
 
-## Deploy from an iPhone
-1. Create a GitHub repository.
-2. Upload the four files `index.html`, `manifest.webmanifest`, `icon.svg`, and `sw.js` to the repository root. You may also upload this README.
-3. In GitHub repository **Settings → Pages**, select **Deploy from a branch**, branch **main**, folder **/(root)**, then Save.
-4. Wait for GitHub Pages to publish. Visit the HTTPS URL shown in Pages settings in Safari.
-5. In Safari, tap Share → Add to Home Screen → Add.
+## Deploy
+1. Upload `index.html`, `manifest.webmanifest`, `icon.svg`, `sw.js` to your GitHub Pages repository root. Do NOT upload API keys.
+2. In Cloudflare Workers & Pages create a Worker and replace its code with `worker.js`. Deploy.
+3. Add Worker secrets/variables: `GROQ_API_KEY` (Secret) and `ALLOWED_ORIGIN` (plain text variable, exact `https://YOUR-USERNAME.github.io`, without trailing slash).
+4. In XENO Settings, paste the Worker URL and save.
 
-## Limitations
-This is a UI prototype, not a live AI assistant. Chat messages are stored in browser localStorage on this device, not synchronized. Offline shell support depends on the service worker being installed and cached after the first online visit. SVG Home Screen icon support can vary across iOS versions; a PNG icon can be added later.
+## Security
+Origin checks and CORS do NOT authenticate a public Worker endpoint; scripts can spoof Origin outside browsers. Add Cloudflare rate limiting and authentication before sustained use. Do not send sensitive information in this prototype. Never put a Groq key in GitHub or the PWA. Cloudflare Workers free usage and Groq API limits apply.
 
-## Next
-Add secure AI calls through a serverless backend, then authentication and cloud memory.
+## Future providers
+Add an adapter to PROVIDERS in worker.js, select provider server-side, and keep frontend request schema unchanged.
